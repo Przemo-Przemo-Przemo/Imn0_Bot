@@ -1,4 +1,4 @@
-package models
+package bot.models
 
 data class TwitchUserJson(var data: List<TwitchUser>)
 data class TwitchUser(var id: String)

@@ -1,17 +1,27 @@
-package repositories
+package bot.repositories.api
 
 import com.beust.klaxon.*
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.coroutines.awaitString
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import models.*
+import bot.models.*
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Configurable
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
 
+@Configuration
 class TwitchRepository {
-    private val clientSecret = "lyr1qt6sg1g7k2suuia4exbny4apc1"
-    private val clientId = "kimv4iz3l99i23wj531dgwvqq68jcj"
+
+    var logger = LoggerFactory.getLogger(javaClass)
+
+    @Value("\${application.twitch.clientSecret}")
+    lateinit var clientSecret: String // = "lyr1qt6sg1g7k2suuia4exbny4apc1"
+
+    @Value("\${application.twitch.clientId}")
+    lateinit var clientId: String //= "kimv4iz3l99i23wj531dgwvqq68jcj"
 
     init {
         var appAccessToken: String = ""
@@ -21,7 +31,7 @@ class TwitchRepository {
         }
 
         FuelManager.instance.baseHeaders = mapOf("Authorization" to "Bearer $appAccessToken",
-            "Client-Id" to "kimv4iz3l99i23wj531dgwvqq68jcj")
+            "Client-Id" to clientId)
     }
 
 

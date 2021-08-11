@@ -1,20 +1,21 @@
-package commands
+package bot.commands
 
-import com.beust.klaxon.Klaxon
-import models.TweetPik
-import models.TweetsJson
+import bot.models.TweetPik
+import bot.models.TweetsJson
 import net.dv8tion.jda.api.events.Event
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
-import repositories.TweetPikRepository
-import repositories.TwitterRepository
+import bot.repositories.api.TweetPikRepository
+import bot.repositories.api.TwitterRepository
+import net.dv8tion.jda.api.entities.TextChannel
+import org.springframework.stereotype.Component
 
-class CommandScreenshoots: ICommand {
-    override suspend fun run(event: Event) {
-        val event = event as GuildMessageReceivedEvent
-        val channel = event.channel
+@Component
+class CommandScreenshoots: Command() {
+    override val name = "screenshoots" // not to be mistaken with screenshots. It's a feature, not a bug (CHWALIK_ADMIN)
 
-        val username = event.message.contentRaw.split(' ')[1]
-        val numberOfTweets = event.message.contentRaw.split(' ')[2].toInt()
+    override suspend fun execute(channel: TextChannel, args: List<String>) {
+        val username = args[0]
+        val numberOfTweets = args[1].toInt()
 
         var tweets: TweetsJson
         try {

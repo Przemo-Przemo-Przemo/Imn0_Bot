@@ -1,0 +1,19 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  data:
+    mongodb:
+      uri: mongodb+srv://Przemo:nfBW1z647cUioCNV@cluster0.a2wxm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      database: chwalik_admin
+
+application:
+  discord:
+    botToken: ${BOT_TOKEN}
+  tweetpik:
+    apiKey: ${TWEETPIK_APIKEY_TOKEN}
+  twitch:
+    clientSecret: ${TWITCH_CLIENTSECRET_TOKEN}
+    clientId: ${TWITCH_CLIENTID_TOKEN}
+  twitter:
+    apiKey: ${TWITTER_APIKEY_TOKEN}

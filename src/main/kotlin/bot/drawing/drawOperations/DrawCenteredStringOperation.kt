@@ -1,6 +1,6 @@
-package logic.drawing.drawOperations
+package bot.drawing.drawOperations
 
-import logic.drawing.IDrawOperation
+import bot.drawing.IDrawOperation
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics

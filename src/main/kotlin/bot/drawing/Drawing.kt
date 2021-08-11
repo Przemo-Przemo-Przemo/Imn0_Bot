@@ -1,4 +1,4 @@
-package logic.drawing
+package bot.drawing
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

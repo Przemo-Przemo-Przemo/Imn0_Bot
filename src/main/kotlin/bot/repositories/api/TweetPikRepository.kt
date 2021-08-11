@@ -1,13 +1,12 @@
-package repositories
+package bot.repositories.api
 
-import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
 import com.beust.klaxon.json
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.coroutines.awaitString
-import models.Tweet
-import models.TweetPik
+import bot.models.Tweet
+import bot.models.TweetPik
 
 class TweetPikRepository {
     init {
