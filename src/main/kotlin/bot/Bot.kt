@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import org.springframework.scheduling.annotation.Scheduled
 import java.awt.Font
@@ -27,6 +28,7 @@ fun main() {
 }
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 class Bot : ListenerAdapter() {
     val prefix = "XD?"
     var data : HashMap<String, Command> = HashMap()

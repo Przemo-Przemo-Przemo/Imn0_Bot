@@ -17,10 +17,10 @@ class TwitchRepository {
 
     var logger = LoggerFactory.getLogger(javaClass)
 
-    @Value("\${application.twitch.clientSecret}")
+    @Value("\${application.twitch.clientSecret:}")
     lateinit var clientSecret: String // = "lyr1qt6sg1g7k2suuia4exbny4apc1"
 
-    @Value("\${application.twitch.clientId}")
+    @Value("\${application.twitch.clientId:}")
     lateinit var clientId: String //= "kimv4iz3l99i23wj531dgwvqq68jcj"
 
     init {

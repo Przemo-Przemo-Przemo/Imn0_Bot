@@ -13,7 +13,7 @@ application:
   tweetpik:
     apiKey: ${TWEETPIK_APIKEY_TOKEN}
   twitch:
-    clientSecret: ${TWITCH_CLIENTSECRET_TOKEN}
-    clientId: ${TWITCH_CLIENTID_TOKEN}
+    clientSecret: lyr1qt6sg1g7k2suuia4exbny4apc1 #${TWITCH_CLIENTSECRET_TOKEN}
+    clientId: kimv4iz3l99i23wj531dgwvqq68jcj #${TWITCH_CLIENTID_TOKEN}
   twitter:
     apiKey: ${TWITTER_APIKEY_TOKEN}
