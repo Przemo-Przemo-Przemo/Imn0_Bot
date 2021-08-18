@@ -3,6 +3,7 @@ package bot
 import bot.commands.*
 import bot.repositories.db.IOProductsLinkNew
 import bot.repositories.db.OProductsLinkNew
+import com.github.kittinunf.fuel.core.FuelManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -16,12 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.Bean
 import org.springframework.scheduling.annotation.Scheduled
 import java.awt.Font
 import java.awt.GraphicsEnvironment
 import java.io.File
 import java.time.Instant
 import javax.annotation.PostConstruct
+import kotlin.random.Random
 
 fun main() {
     Bot().main()
@@ -34,12 +37,17 @@ class Bot : ListenerAdapter() {
     var data : HashMap<String, Command> = HashMap()
 
     val log = LoggerFactory.getLogger(javaClass)
-
+    @Bean
+    public fun fuelManager(): FuelManager {
+        return FuelManager()
+    }
     lateinit var jda: JDA
     @Autowired
     lateinit var commands: List<Command>
     @Autowired
-    lateinit var oProductsLinkNewRepository: IOProductsLinkNew;
+    lateinit var oProductsLinkNewRepository: IOProductsLinkNew
+    @Autowired
+    lateinit var randomMessagesArgumentsGenerator: RandomMessagesArgumentsGenerator
 
     fun main() {
         runApplication<Bot>()
@@ -71,8 +79,11 @@ class Bot : ListenerAdapter() {
         val count = max-min+1
         val timeRangeInSeconds = 100L
 
+        val commandsNames = data.keys.toTypedArray()
+
         for(i in min..max) {
-            val toSave = OProductsLinkNew(null, Instant.now().plusSeconds((timeRangeInSeconds/count)*i), "pong")
+            val commandName = "clips"//commandsNames[Random.nextInt(1, data.size-1)]
+            val toSave = OProductsLinkNew(null, Instant.now().plusSeconds((timeRangeInSeconds/count)*i), commandName, randomMessagesArgumentsGenerator.randomArguments(commandName))
             oProductsLinkNewRepository.save(toSave)
         }
     }
@@ -85,7 +96,7 @@ class Bot : ListenerAdapter() {
         for(time in chwalik_admin_oTimesIntegratedReturnProductPageTenWhereOfferIdIsGreaterThanBKP_FIX566) {
             runBlocking {
                 val channel = jda.getTextChannelById(857395035237253131)
-                if(channel != null) data[time.commandName]?.execute(channel, listOf())
+                if(channel != null) data[time.commandName]?.execute(channel, time.args)
             }
         }
     }

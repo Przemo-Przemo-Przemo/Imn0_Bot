@@ -7,11 +7,17 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import bot.repositories.api.TweetPikRepository
 import bot.repositories.api.TwitterRepository
 import net.dv8tion.jda.api.entities.TextChannel
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class CommandScreenshoots: Command() {
     override val name = "screenshoots" // not to be mistaken with screenshots. It's a feature, not a bug (CHWALIK_ADMIN)
+
+    @Autowired
+    lateinit var twitterRepository: TwitterRepository
+    @Autowired
+    lateinit var tweetPikRepository: TweetPikRepository
 
     override suspend fun execute(channel: TextChannel, args: List<String>) {
         val username = args[0]
@@ -19,7 +25,7 @@ class CommandScreenshoots: Command() {
 
         var tweets: TweetsJson
         try {
-            tweets = TwitterRepository().getTweets(username, numberOfTweets)
+            tweets = twitterRepository.getTweets(username, numberOfTweets)
         }
 
         catch(exception: Exception) {
@@ -37,7 +43,7 @@ class CommandScreenshoots: Command() {
                 var tweetPik: TweetPik
 
                 try {
-                    tweetPik = TweetPikRepository().getTweetPik(tweet)
+                    tweetPik = tweetPikRepository.getTweetPik(tweet)
                 }
 
                 catch(exception : Exception) {

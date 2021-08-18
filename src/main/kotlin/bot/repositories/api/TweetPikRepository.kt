@@ -7,10 +7,15 @@ import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.coroutines.awaitString
 import bot.models.Tweet
 import bot.models.TweetPik
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Configuration
 
-class TweetPikRepository {
+@Configuration
+class TweetPikRepository(
+    @Value("\${application.tweetpik.apiKey}") private var apiKey: String,
+) {
     init {
-        FuelManager.instance.baseHeaders = mapOf("Authorization" to "002b6c10-de27-45e5-88b9-6c4f029e89cc",
+        FuelManager.instance.baseHeaders = mapOf("Authorization" to apiKey,
                                                  "Content-Type" to "application/json")
     }
 

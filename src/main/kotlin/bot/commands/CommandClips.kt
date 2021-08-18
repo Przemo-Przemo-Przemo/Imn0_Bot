@@ -17,7 +17,6 @@ class CommandClips : Command() {
     override suspend fun execute(channel: TextChannel, args: List<String>) {
         val username = args[0]
 
-//        val twitchRepository = TwitchRepository()
         val userId = twitchRepository.getUser(username).id
         val bestClip = twitchRepository.getClips(userId)[0]
 

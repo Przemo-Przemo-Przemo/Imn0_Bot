@@ -6,10 +6,16 @@ import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.coroutines.awaitString
 import bot.models.TweetsJson
 import bot.models.TwitterUserJson
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Component
 
-class TwitterRepository {
+@Configuration
+class TwitterRepository(
+    @Value("\${application.twitter.apiKey}") apiKey: String
+) {
     init {
-        FuelManager.instance.baseHeaders = mapOf("Authorization" to "Bearer AAAAAAAAAAAAAAAAAAAAAITqQwEAAAAAGrEbxOEtPdn1C7yvmM6hxeBT%2F8s%3Daew59HgCnTeHDp5FrEuB28FOW3RSYrNseFJ6EGCX42F8qlJz1M")
+        FuelManager.instance.baseHeaders = mapOf("Authorization" to apiKey)
     }
 
     suspend fun getTweets(username: String, numberOfTweets: Int): TweetsJson {

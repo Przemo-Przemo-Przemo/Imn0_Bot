@@ -5,13 +5,16 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import java.time.Instant
 
 @Document(collection = "AccountProducts")
-data class AccountProducts(@Id val id: String? = null, val meme: String, val name: String)
+data class AccountProducts(@Id val id: String? = null, var pingsSourceChannelId: String)
 
 @Document(collection= "oProductsLinkNEW")
-data class OProductsLinkNew(@Id val id: String? = null, val timeWhenToSendMessage: Instant, val commandName: String)
+data class OProductsLinkNew(@Id val id: String? = null,
+                            val timeWhenToSendMessage: Instant,
+                            val commandName: String,
+                            val args: List<String>)
 
 interface IAccountProductsRepository : MongoRepository<AccountProducts, String> {
-    fun findFirstByName(name: String): AccountProducts
+    //fun findFirst(): AccountProducts?
 }
 
 interface IOProductsLinkNew : MongoRepository<OProductsLinkNew, String> {
