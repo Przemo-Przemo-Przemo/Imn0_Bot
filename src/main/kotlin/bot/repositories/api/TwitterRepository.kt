@@ -14,8 +14,10 @@ import org.springframework.stereotype.Component
 class TwitterRepository(
     @Value("\${application.twitter.apiKey}") apiKey: String
 ) {
+    private val fuel = FuelManager()
+
     init {
-        FuelManager.instance.baseHeaders = mapOf("Authorization" to apiKey)
+        fuel.baseHeaders = mapOf("Authorization" to apiKey)
     }
 
     suspend fun getTweets(username: String, numberOfTweets: Int): TweetsJson {
@@ -24,7 +26,7 @@ class TwitterRepository(
 
         var tweets = Klaxon().parse<TweetsJson>(
             try {
-                Fuel.get("https://api.twitter.com/2/users/${userId}/tweets", listOf("max_results" to numberOfTweets))
+                fuel.get("https://api.twitter.com/2/users/${userId}/tweets", listOf("max_results" to numberOfTweets))
                     .awaitString()
             } catch (exception: Exception) {
                 throw exception
@@ -38,7 +40,7 @@ class TwitterRepository(
     private suspend fun getUser(username: String): TwitterUserJson {
         var user = Klaxon().parse<TwitterUserJson>(
             try {
-                Fuel.get("https://api.twitter.com/2/users/by/username/${username}").awaitString()
+                fuel.get("https://api.twitter.com/2/users/by/username/${username}").awaitString()
             } catch (exception: Exception) {
                 throw exception
             }

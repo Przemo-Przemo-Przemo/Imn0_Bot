@@ -9,13 +9,16 @@ import bot.models.Tweet
 import bot.models.TweetPik
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Scope
 
 @Configuration
 class TweetPikRepository(
-    @Value("\${application.tweetpik.apiKey}") private var apiKey: String,
+    @Value("\${application.tweetpik.apiKey}") var apiKey: String,
 ) {
+    private val fuel = FuelManager()
+
     init {
-        FuelManager.instance.baseHeaders = mapOf("Authorization" to apiKey,
+        fuel.baseHeaders = mapOf("Authorization" to apiKey,
                                                  "Content-Type" to "application/json")
     }
 
@@ -30,7 +33,7 @@ class TweetPikRepository(
 
         var tweetPik = Klaxon().parse<TweetPik>(
             try {
-                Fuel.post("https://tweetpik.com/api/images")
+                fuel.post("https://tweetpik.com/api/images")
                     .body(json.toJsonString())
                     .awaitString()
             } catch (exception: Exception) {

@@ -14,10 +14,12 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import java.awt.Font
 import java.awt.GraphicsEnvironment
@@ -31,16 +33,14 @@ fun main() {
 }
 
 @SpringBootApplication
+@EnableScheduling
 @ConfigurationPropertiesScan
 class Bot : ListenerAdapter() {
     val prefix = "XD?"
     var data : HashMap<String, Command> = HashMap()
 
     val log = LoggerFactory.getLogger(javaClass)
-    @Bean
-    public fun fuelManager(): FuelManager {
-        return FuelManager()
-    }
+
     lateinit var jda: JDA
     @Autowired
     lateinit var commands: List<Command>
@@ -48,6 +48,7 @@ class Bot : ListenerAdapter() {
     lateinit var oProductsLinkNewRepository: IOProductsLinkNew
     @Autowired
     lateinit var randomMessagesArgumentsGenerator: RandomMessagesArgumentsGenerator
+    @Value("\${application.discord.botToken}") lateinit var botToken: String
 
     fun main() {
         runApplication<Bot>()
@@ -55,8 +56,7 @@ class Bot : ListenerAdapter() {
 
     @PostConstruct
     fun startup() {
-        var token = "ODU3MzM4Mjk0Mjc4MTYwNDM0.YNOIgQ.R2HqdtEVIkVWZfOufp64NsLk6Z0"
-        var builder = JDABuilder.createLight(token)
+        val builder = JDABuilder.createLight(botToken)
             .setActivity(Activity.playing("prefix - $prefix"))
 
         initializeCommands()
@@ -65,41 +65,35 @@ class Bot : ListenerAdapter() {
 
         builder.addEventListeners(this)
         jda = builder.build().awaitReady()
-
-        penisMusic()
     }
 
     /**
         schedules to mongo times when new random messages shall be sent
      */
     fun scheduleRandomMessages() {
-        val min = 0
-        val max = 9
-
-        val count = max-min+1
+        val count = 10
         val timeRangeInSeconds = 100L
 
-        val commandsNames = data.keys.toTypedArray()
-
-        for(i in min..max) {
-            val commandName = "clips"//commandsNames[Random.nextInt(1, data.size-1)]
-            val toSave = OProductsLinkNew(null, Instant.now().plusSeconds((timeRangeInSeconds/count)*i), commandName, randomMessagesArgumentsGenerator.randomArguments(commandName))
+        for(i in 0..count) {
+            val randomCommandWithRandomArguments = randomMessagesArgumentsGenerator.randomCommandWithRandomArguments()
+            val toSave = OProductsLinkNew(null, Instant.now().plusSeconds((timeRangeInSeconds/count)*i), randomCommandWithRandomArguments.first, randomCommandWithRandomArguments.second)
             oProductsLinkNewRepository.save(toSave)
         }
     }
 
     @Scheduled(fixedRate = 5000)
-    fun penisMusic() {
-        log.info("Executing penis method...")
-        var chwalik_admin_oTimesIntegratedReturnProductPageTenWhereOfferIdIsGreaterThanBKP_FIX566 = oProductsLinkNewRepository.findByTimeWhenToSendMessageBefore(Instant.now())
+    fun chwalik_admin() {
+        log.info("Executing chwalik_admin method...")
+        val chwalik_admin_oTimesIntegratedReturnProductPageTenWhereOfferIdIsGreaterThanBKP_FIX566 = oProductsLinkNewRepository.findByTimeWhenToSendMessageBefore(Instant.now())
 
         for(time in chwalik_admin_oTimesIntegratedReturnProductPageTenWhereOfferIdIsGreaterThanBKP_FIX566) {
             runBlocking {
                 val channel = jda.getTextChannelById(857395035237253131)
                 if(channel != null) data[time.commandName]?.execute(channel, time.args)
+                oProductsLinkNewRepository.deleteById(time.id)
             }
         }
-    }
+   }
 
     fun initializeCommands() {
         for(command in commands) {
@@ -108,7 +102,7 @@ class Bot : ListenerAdapter() {
     }
 
     fun initializeFonts() {
-        var lobster = Font.createFont(Font.TRUETYPE_FONT, File("D:\\Lobster-Regular.ttf"))
+        val lobster = Font.createFont(Font.TRUETYPE_FONT, File("D:\\Lobster-Regular.ttf"))
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(lobster)
     }
 
@@ -117,16 +111,16 @@ class Bot : ListenerAdapter() {
     }
 
     private suspend fun onGuildMessageReceivedAsync(event: GuildMessageReceivedEvent) {
-        var message = event.message
-        var author = message.author
+        val message = event.message
+        val author = message.author
 
         if(author.isBot) return
 
         if(message.contentRaw.startsWith(prefix)) {
-            var prefixWithCommand = message.contentRaw.split(' ')[0]
-            var commandName = prefixWithCommand.substringAfterLast(prefix)
+            val prefixWithCommand = message.contentRaw.split(' ')[0]
+            val commandName = prefixWithCommand.substringAfterLast(prefix)
 
-            var command = data[commandName]
+            val command = data[commandName]
 
             if(command == null) {
                 event.channel.sendMessage("Taka komenda nie istnieje XDDDDDDD???").queue()
