@@ -10,6 +10,7 @@ import bot.models.TweetPik
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
+import java.lang.NullPointerException
 
 @Configuration
 class TweetPikRepository(
@@ -18,30 +19,28 @@ class TweetPikRepository(
     private val fuel = FuelManager()
 
     init {
-        fuel.baseHeaders = mapOf("Authorization" to apiKey,
-                                                 "Content-Type" to "application/json")
+        fuel.baseHeaders = mapOf(
+            "Authorization" to apiKey,
+            "Content-Type" to "application/json"
+        )
     }
 
     suspend fun getTweetPik(tweet: Tweet): TweetPik {
         val tweetId = tweet.id
 
-        val json = json {
+        val json = json { // TODO (NEVER): CHECK THIS SHIT          p. s. never teach primates javascript
             obj(
                 "tweetId" to tweetId
             )
         }
 
         var tweetPik = Klaxon().parse<TweetPik>(
-            try {
                 fuel.post("https://tweetpik.com/api/images")
                     .body(json.toJsonString())
                     .awaitString()
-            } catch (exception: Exception) {
-                throw exception
-            }
         )
 
-        if(tweetPik == null) throw Exception("TweetPik is null")
+        if(tweetPik == null) throw NullPointerException("TweetPik is null")
         return tweetPik
     }
 }

@@ -43,7 +43,8 @@ class Drawing(private val sourceImagePath: String) {
 
         graphics.setRenderingHint(
             RenderingHints.KEY_TEXT_ANTIALIASING,
-            RenderingHints.VALUE_TEXT_ANTIALIAS_GASP)
+            RenderingHints.VALUE_TEXT_ANTIALIAS_GASP
+        )
 
         return graphics
     }

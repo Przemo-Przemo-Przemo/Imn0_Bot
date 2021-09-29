@@ -13,9 +13,7 @@ data class OProductsLinkNew(@Id val id: String? = null,
                             val commandName: String,
                             val args: List<String>)
 
-interface IAccountProductsRepository : MongoRepository<AccountProducts, String> {
-    //fun findFirst(): AccountProducts?
-}
+interface IAccountProductsRepository : MongoRepository<AccountProducts, String>
 
 interface IOProductsLinkNew : MongoRepository<OProductsLinkNew, String> {
     fun findByTimeWhenToSendMessageBefore(before: Instant): List<OProductsLinkNew>

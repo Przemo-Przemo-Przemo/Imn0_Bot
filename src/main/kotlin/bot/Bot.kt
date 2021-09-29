@@ -3,7 +3,6 @@ package bot
 import bot.commands.*
 import bot.repositories.db.IOProductsLinkNew
 import bot.repositories.db.OProductsLinkNew
-import com.github.kittinunf.fuel.core.FuelManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Bean
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import java.awt.Font
@@ -26,7 +24,6 @@ import java.awt.GraphicsEnvironment
 import java.io.File
 import java.time.Instant
 import javax.annotation.PostConstruct
-import kotlin.random.Random
 
 fun main() {
     Bot().main()
@@ -39,16 +36,20 @@ class Bot : ListenerAdapter() {
     val prefix = "XD?"
     var data : HashMap<String, Command> = HashMap()
 
-    val log = LoggerFactory.getLogger(javaClass)
-
+    private val log = LoggerFactory.getLogger(javaClass)
     lateinit var jda: JDA
+    
     @Autowired
     lateinit var commands: List<Command>
+
     @Autowired
     lateinit var oProductsLinkNewRepository: IOProductsLinkNew
+
     @Autowired
     lateinit var randomMessagesArgumentsGenerator: RandomMessagesArgumentsGenerator
-    @Value("\${application.discord.botToken}") lateinit var botToken: String
+
+    @Value("\${application.discord.botToken}")
+    lateinit var botToken: String
 
     fun main() {
         runApplication<Bot>()
@@ -71,12 +72,22 @@ class Bot : ListenerAdapter() {
         schedules to mongo times when new random messages shall be sent
      */
     fun scheduleRandomMessages() {
-        val count = 10
+        val count = 1
         val timeRangeInSeconds = 100L
+        val delayBetweenCommands = timeRangeInSeconds / count
 
         for(i in 0..count) {
             val randomCommandWithRandomArguments = randomMessagesArgumentsGenerator.randomCommandWithRandomArguments()
-            val toSave = OProductsLinkNew(null, Instant.now().plusSeconds((timeRangeInSeconds/count)*i), randomCommandWithRandomArguments.first, randomCommandWithRandomArguments.second)
+            val commandName = randomCommandWithRandomArguments.first
+            val commandArguments = randomCommandWithRandomArguments.second
+
+            val toSave = OProductsLinkNew(
+                null,
+                Instant.now().plusSeconds(delayBetweenCommands * i), // for example: do the command in 10s, 20s, 30s, ...
+                commandName,
+                commandArguments
+            )
+
             oProductsLinkNewRepository.save(toSave)
         }
     }
@@ -102,7 +113,16 @@ class Bot : ListenerAdapter() {
     }
 
     fun initializeFonts() {
-        val lobster = Font.createFont(Font.TRUETYPE_FONT, File("D:\\Lobster-Regular.ttf"))
+        val fontPathInResources = "/Lobster-Regular.ttf"
+        val path = javaClass.getResource(fontPathInResources)?.path
+
+        if(path == null) {
+            log.error("Cannot find file ${fontPathInResources} in resources folder")
+        }
+
+        val file = File(path)
+
+        val lobster = Font.createFont(Font.TRUETYPE_FONT, file)
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(lobster)
     }
 
@@ -124,9 +144,7 @@ class Bot : ListenerAdapter() {
 
             if(command == null) {
                 event.channel.sendMessage("Taka komenda nie istnieje XDDDDDDD???").queue()
-            }
-
-            else {
+            } else {
                 command.run(event)
             }
         }

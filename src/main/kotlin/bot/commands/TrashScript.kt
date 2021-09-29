@@ -1,6 +1,7 @@
 package bot.commands
 
 import bot.repositories.db.IAccountProductsRepository
+import com.github.kittinunf.fuel.coroutines.awaitString
 import net.dv8tion.jda.api.entities.TextChannel
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -36,5 +37,13 @@ class TrashScript {
 //
 ////        channel.sendMessage(accountProduct.meme).queue()
 //        }
+//    }
+
+
+//    try {
+//        fuel.get("https://api.twitch.tv/helix/users", listOf("login" to username))
+//            .awaitString()
+//    } catch (exception: Exception) { // #NoBoilerplate
+//        throw exception
 //    }
 }

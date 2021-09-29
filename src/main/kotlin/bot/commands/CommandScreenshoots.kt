@@ -26,9 +26,7 @@ class CommandScreenshoots: Command() {
         var tweets: TweetsJson
         try {
             tweets = twitterRepository.getTweets(username, numberOfTweets)
-        }
-
-        catch(exception: Exception) {
+        } catch(exception: Exception) {
             channel.sendMessage("A network request exception was thrown: ${exception.message}").queue()
             return
         }
@@ -44,9 +42,7 @@ class CommandScreenshoots: Command() {
 
                 try {
                     tweetPik = tweetPikRepository.getTweetPik(tweet)
-                }
-
-                catch(exception : Exception) {
+                } catch(exception : Exception) {
                     channel.sendMessage("A network request exception was thrown: ${exception.message}").queue()
                     continue
                 }
