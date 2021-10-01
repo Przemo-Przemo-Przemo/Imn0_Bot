@@ -29,8 +29,8 @@ fun main() {
     Bot().main()
 }
 
-@SpringBootApplication
 @EnableScheduling
+@SpringBootApplication
 @ConfigurationPropertiesScan
 class Bot : ListenerAdapter() {
     val prefix = "XD?"

@@ -9,11 +9,11 @@ spring:
 
 application:
   discord:
-    botToken: ODU3MzM4Mjk0Mjc4MTYwNDM0.YNOIgQ.R2HqdtEVIkVWZfOufp64NsLk6Z0 #${BOT_TOKEN}
+    botToken: ${BOT_DISCORD_TOKEN}
   tweetpik:
-    apiKey: 002b6c10-de27-45e5-88b9-6c4f029e89cc #${TWEETPIK_APIKEY_TOKEN}
+    apiKey: ${BOT_TWEETPIK_KEY}
   twitch:
-    clientSecret: lyr1qt6sg1g7k2suuia4exbny4apc1 #${TWITCH_CLIENTSECRET_TOKEN}
-    clientId: kimv4iz3l99i23wj531dgwvqq68jcj #${TWITCH_CLIENTID_TOKEN}
+    clientSecret: ${BOT_TWITCH_CLIENT_SECRET}
+    clientId: ${BOT_TWITCH_CLIENT_ID}
   twitter:
-    apiKey: Bearer AAAAAAAAAAAAAAAAAAAAAITqQwEAAAAAGrEbxOEtPdn1C7yvmM6hxeBT%2F8s%3Daew59HgCnTeHDp5FrEuB28FOW3RSYrNseFJ6EGCX42F8qlJz1M #${TWITTER_APIKEY_TOKEN}
+    apiKey: ${BOT_TWITTER_KEY}

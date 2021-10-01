@@ -40,8 +40,10 @@ class TwitchRepository(
                 fuel.post("https://id.twitch.tv/oauth2/token", params)
                     .awaitString()
 
-        val accessTokenJsonObject = (Parser.default().parse(appAccessTokenJson) as JsonObject)
-        val appAccessToken = accessTokenJsonObject["access_token"] ?: throw NullPointerException("Returned App Access Token is Null")
+        val parser = Parser.default()
+        val accessTokenJsonObject = parser.parse(appAccessTokenJson.reader()) as JsonObject
+        val appAccessToken = accessTokenJsonObject["access_token"]
+            ?: throw NullPointerException("Returned App Access Token is Null")
 
         return appAccessToken as String
     }

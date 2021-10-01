@@ -18,7 +18,7 @@ class TwitterRepository(
     private val fuel = FuelManager()
 
     init {
-        fuel.baseHeaders = mapOf("Authorization" to apiKey)
+        fuel.baseHeaders = mapOf("Authorization" to "Bearer $apiKey")
     }
 
     suspend fun getTweets(username: String, numberOfTweets: Int): TweetsJson {
