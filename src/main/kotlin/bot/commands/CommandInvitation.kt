@@ -16,18 +16,19 @@ class CommandInvitation : Command() {
         var event = event as GuildMessageReceivedEvent
         var channel = event.channel
 
-        execute(channel, listOf(event.author.name))
+        val invitedPersonName = event.message.contentDisplay.split(" ")[1]
+        execute(channel, listOf(invitedPersonName))
     }
 
     override suspend fun execute(channel: TextChannel, args: List<String>) {
-        val authorName = args[0]
+        val personName = args[0]
 
         val font = Font("Lobster", Font.PLAIN, 20)
         val color  = Color(219, 131, 173)
         val textArea = Rectangle(340, 200, 115, 30)
 
         val sourceImage = "Invitation.png" //TODO: refactor :<
-        val invitationalImage = Drawing(sourceImage).getImage(DrawCenteredStringOperation(authorName, font, color, textArea))
+        val invitationalImage = Drawing(sourceImage).getImage(DrawCenteredStringOperation(personName, font, color, textArea))
 
         channel.sendFile(invitationalImage).queue()
     }
