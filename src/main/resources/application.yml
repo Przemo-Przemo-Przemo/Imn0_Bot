@@ -4,7 +4,7 @@ spring:
       enabled: always
   data:
     mongodb:
-      uri: mongodb+srv://Przemo:nfBW1z647cUioCNV@cluster0.a2wxm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      uri: ${BOT_MONGO_URI}
       database: chwalik_admin
 
 application:
