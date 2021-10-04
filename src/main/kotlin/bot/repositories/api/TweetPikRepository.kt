@@ -1,24 +1,22 @@
 package bot.repositories.api
 
+import bot.BotConfiguration
 import com.beust.klaxon.Klaxon
 import com.beust.klaxon.json
-import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.coroutines.awaitString
 import bot.models.Tweet
 import bot.models.TweetPik
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Scope
 import java.lang.NullPointerException
 
 @Configuration
-class TweetPikRepository(
-    @Value("\${application.tweetpik.apiKey}") var apiKey: String,
-) {
+class TweetPikRepository(private val config: BotConfiguration) {
     private val fuel = FuelManager()
 
     init {
+        val apiKey = config.tweetpikApiKey
+
         fuel.baseHeaders = mapOf(
             "Authorization" to apiKey,
             "Content-Type" to "application/json"

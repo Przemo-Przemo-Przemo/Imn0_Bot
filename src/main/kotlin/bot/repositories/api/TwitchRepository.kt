@@ -1,25 +1,25 @@
 package bot.repositories.api
 
+import bot.BotConfiguration
 import com.beust.klaxon.*
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.coroutines.awaitString
 import kotlinx.coroutines.runBlocking
 import bot.models.*
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import java.lang.NullPointerException
 
 @Configuration
-class TwitchRepository(
-    @Value("\${application.twitch.clientSecret}") private val clientSecret: String,
-    @Value("\${application.twitch.clientId}") private val clientId: String
-) {
+class TwitchRepository(private val config: BotConfiguration) {
     private var logger = LoggerFactory.getLogger(javaClass)
     private val fuel = FuelManager()
 
     init {
         runBlocking {
+            val clientId = config.twitterClientId
+            val clientSecret = config.twitterClientSecret
+
             val appAccessToken = getAppAccessToken(clientId, clientSecret)
 
             fuel.baseHeaders = mapOf( //todo: fix not remembered across instances

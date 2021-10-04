@@ -1,23 +1,20 @@
 package bot.repositories.api
 
+import bot.BotConfiguration
 import com.beust.klaxon.Klaxon
-import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.FuelManager
 import com.github.kittinunf.fuel.coroutines.awaitString
 import bot.models.TweetsJson
 import bot.models.TwitterUserJson
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
 import java.lang.NullPointerException
 
 @Configuration
-class TwitterRepository(
-    @Value("\${application.twitter.apiKey}") apiKey: String
-) {
+class TwitterRepository(private val config: BotConfiguration) {
     private val fuel = FuelManager()
 
     init {
+        val apiKey = config.twitterApiKey
         fuel.baseHeaders = mapOf("Authorization" to "Bearer $apiKey")
     }
 
