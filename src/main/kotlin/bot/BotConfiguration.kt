@@ -8,8 +8,8 @@ class BotConfiguration(
     // Secrets
     @Value("\${application.discord.botToken}") val discordToken: String,
     @Value("\${application.tweetpik.apiKey}") val tweetpikApiKey: String,
-    @Value("\${application.twitter.clientSecret}") val twitterClientSecret: String,
-    @Value("\${application.twitter.clientId}") val twitterClientId: String,
+    @Value("\${application.twitch.clientSecret}") val twitchClientSecret: String,
+    @Value("\${application.twitch.clientId}") val twitchClientId: String,
     @Value("\${application.twitter.apikey}") val twitterApiKey: String,
 
     // Configuration variables

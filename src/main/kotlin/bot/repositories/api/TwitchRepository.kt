@@ -17,8 +17,8 @@ class TwitchRepository(private val config: BotConfiguration) {
 
     init {
         runBlocking {
-            val clientId = config.twitterClientId
-            val clientSecret = config.twitterClientSecret
+            val clientId = config.twitchClientId
+            val clientSecret = config.twitchClientSecret
 
             val appAccessToken = getAppAccessToken(clientId, clientSecret)
 
