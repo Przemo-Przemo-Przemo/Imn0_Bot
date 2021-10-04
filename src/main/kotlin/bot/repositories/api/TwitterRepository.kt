@@ -18,16 +18,12 @@ class TwitterRepository(private val config: BotConfiguration) {
         fuel.baseHeaders = mapOf("Authorization" to "Bearer $apiKey")
     }
 
-    suspend fun getTweets(username: String, numberOfTweets: Int): TweetsJson {
         val user = getUser(username)
         val userId = user.data.id
 
-        var tweets = Klaxon().parse<TweetsJson>(
-            fuel.get("https://api.twitter.com/2/users/${userId}/tweets", listOf("max_results" to numberOfTweets))
                 .awaitString()
         ) ?: throw NullPointerException("Tweets are null")
 
-        return tweets
     }
 
     private suspend fun getUser(username: String): TwitterUserJson {

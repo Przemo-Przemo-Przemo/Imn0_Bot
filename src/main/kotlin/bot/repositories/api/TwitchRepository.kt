@@ -22,7 +22,7 @@ class TwitchRepository(private val config: BotConfiguration) {
 
             val appAccessToken = getAppAccessToken(clientId, clientSecret)
 
-            fuel.baseHeaders = mapOf( //todo: fix not remembered across instances
+            fuel.baseHeaders = mapOf(
                 "Authorization" to "Bearer $appAccessToken",
                 "Client-Id" to clientId
             )

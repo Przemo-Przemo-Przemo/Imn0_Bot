@@ -1,5 +1,6 @@
 package bot.commands
 
+import bot.models.Tweet
 import bot.models.TweetsJson
 import bot.repositories.api.TwitchRepository
 import net.dv8tion.jda.api.events.Event
@@ -19,7 +20,7 @@ class CommandGet : Command() {
         val username = args[0]
         val numberOfTweets = args[1].toInt()
 
-        var tweets: TweetsJson
+        val tweets: List<Tweet>
         try {
             tweets = twitterRepository.getTweets(username, numberOfTweets)
         }
@@ -29,15 +30,13 @@ class CommandGet : Command() {
             return
         }
 
-        if (tweets != null) {
-            if(tweets.meta?.result_count == 0) {
-                channel.sendMessage("no tweets found XD?").queue()
-                return
-            }
+        if(tweets.isEmpty()) {
+            channel.sendMessage("no tweets found XD?").queue()
+            return
+        }
 
-            for(tweet in tweets.data!!) {
-                channel.sendMessage("https://twitter.com/trigomemetry/status/${tweet.id}").queue() //temporary?
-            }
+        for(tweet in tweets) {
+            channel.sendMessage("https://twitter.com/${username}/status/${tweet.id}").queue() //temporary?
         }
     }
 }

@@ -1,5 +1,6 @@
 package bot.commands
 
+import bot.models.Tweet
 import bot.models.TweetPik
 import bot.models.TweetsJson
 import net.dv8tion.jda.api.events.Event
@@ -23,7 +24,7 @@ class CommandScreenshoots: Command() {
         val username = args[0]
         val numberOfTweets = args[1].toInt()
 
-        var tweets: TweetsJson
+        val tweets: List<Tweet>
         try {
             tweets = twitterRepository.getTweets(username, numberOfTweets)
         } catch(exception: Exception) {
@@ -31,24 +32,22 @@ class CommandScreenshoots: Command() {
             return
         }
 
-        if (tweets != null) {
-            if(tweets.meta?.result_count == 0) {
-                channel.sendMessage("no tweets found XD?").queue()
-                return
+        if(tweets.isEmpty()) {
+            channel.sendMessage("no tweets found XD?").queue()
+            return
+        }
+
+        for(tweet in tweets) {
+            var tweetPik: TweetPik
+
+            try {
+                tweetPik = tweetPikRepository.getTweetPik(tweet)
+            } catch(exception : Exception) {
+                channel.sendMessage("A network request exception was thrown: ${exception.message}").queue()
+                continue
             }
 
-            for(tweet in tweets.data!!) {
-                var tweetPik: TweetPik
-
-                try {
-                    tweetPik = tweetPikRepository.getTweetPik(tweet)
-                } catch(exception : Exception) {
-                    channel.sendMessage("A network request exception was thrown: ${exception.message}").queue()
-                    continue
-                }
-
-                channel.sendMessage(tweetPik.url).queue() //temporary?
-            }
+            channel.sendMessage(tweetPik.url).queue() //temporary?
         }
     }
 }
