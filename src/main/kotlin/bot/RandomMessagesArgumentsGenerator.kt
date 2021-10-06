@@ -1,23 +1,45 @@
 package bot
 
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import net.dv8tion.jda.api.JDA
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import kotlin.random.Random
 
 @Component
-class RandomMessagesArgumentsGenerator {
-    val commandNameToListOfSetOfPossibleArguments: HashMap<String, List<Set<String>>> = HashMap()
+class RandomMessagesArgumentsGenerator(jda: JDA, config: BotConfiguration) {
+    private val commandNameToListOfSetOfPossibleArguments: HashMap<String, List<Set<String>>> = HashMap()
 
     //todo: reflections test whether all commands are met
-    constructor() {
-        commandNameToListOfSetOfPossibleArguments["clips"] = listOf(setOf("Pokimane", "Jinnytty"))
-        commandNameToListOfSetOfPossibleArguments["get"] = listOf(setOf("pokimanelol", "lolesports"), setOf("5")) //todo: change to 1 add handling in repository so minimum can be 1
-        commandNameToListOfSetOfPossibleArguments["invitation"] = listOf(setOf("Imno")) //todo: randomize to guild members
-        commandNameToListOfSetOfPossibleArguments["pong"] = listOf(setOf(""))
-        commandNameToListOfSetOfPossibleArguments["screenshoots"] = listOf(setOf("pokimanelol", "lolesports"), setOf("5"))
+    init {
+        commandNameToListOfSetOfPossibleArguments["clips"] = listOf(
+            setOf("Pokimane", "Jinnytty", "ratirl", "thebausffs", "drututt")
+        )
+
+        commandNameToListOfSetOfPossibleArguments["get"] = listOf(
+            setOf("pokimanelol", "lolesports", "Aatroxcarry", "thebausffs", "drututt"),
+            setOf((0..5).random().toString())
+        )
+
+        val members = jda.getGuildById(config.mainGuildId)?.loadMembers()?.get()
+        val membersNames = members?.map { member -> member.user.name }
+        commandNameToListOfSetOfPossibleArguments["invitation"] = listOf(
+            membersNames?.toSet() ?: setOf("Imno")
+        )
+
+        commandNameToListOfSetOfPossibleArguments["pong"] = listOf(
+            setOf("")
+        )
+
+        commandNameToListOfSetOfPossibleArguments["screenshoots"] = listOf(
+            setOf("pokimanelol", "lolesports", "Aatroxcarry", "thebausffs", "drututt"),
+            setOf((0..5).random().toString())
+        )
     }
 
     fun randomCommandWithRandomArguments(): Pair<String, List<String>> {
         val command = commandNameToListOfSetOfPossibleArguments.keys.random()
+//        val command = "invitation"
 
         return Pair(command, randomArguments(command))
     }

@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class BotConfiguration(
-    // Secrets
+    // Dirty Secrets :>
     @Value("\${application.discord.botToken}") val discordToken: String,
     @Value("\${application.tweetpik.apiKey}") val tweetpikApiKey: String,
     @Value("\${application.twitch.clientSecret}") val twitchClientSecret: String,
@@ -13,6 +13,5 @@ class BotConfiguration(
     @Value("\${application.twitter.apikey}") val twitterApiKey: String,
 
     // Configuration variables
-    // TODO: Add some parameters to customize the behavior of the bot.
-    //      E.g. delay between sending tweets or id of the channel where it will send them
+    @Value("\${application.discord.mainGuildId}") val mainGuildId: String
 )

@@ -11,12 +11,15 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import net.dv8tion.jda.api.requests.GatewayIntent
+import net.dv8tion.jda.api.utils.MemberCachePolicy
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
+import org.springframework.context.annotation.Bean
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
 import java.awt.Font
@@ -55,19 +58,25 @@ class Bot : ListenerAdapter() {
         runApplication<Bot>()
     }
 
-    @PostConstruct
-    fun startup() {
+    @Bean
+    fun startup(config: BotConfiguration): JDA {
         val builder = JDABuilder.createLight(config.discordToken)
             .setActivity(Activity.playing("prefix - $prefix"))
+            .enableIntents(GatewayIntent.GUILD_MEMBERS)
 
         initializeCommands()
         initializeFonts()
-        scheduleRandomMessages()
 
         builder.addEventListeners(this)
         jda = builder.build().awaitReady()
+
+        return jda;
     }
 
+    @PostConstruct
+    fun setupScheduleRandomMessages() {
+        scheduleRandomMessages()
+    }
     /**
         schedules to mongo times when new random messages shall be sent
      */
