@@ -48,8 +48,8 @@ class Bot : ListenerAdapter() {
     @Autowired
     lateinit var randomMessagesArgumentsGenerator: RandomMessagesArgumentsGenerator
 
-    @Value("\${application.discord.botToken}")
-    lateinit var botToken: String
+    @Autowired
+    lateinit var config: BotConfiguration
 
     fun main() {
         runApplication<Bot>()
@@ -57,7 +57,7 @@ class Bot : ListenerAdapter() {
 
     @PostConstruct
     fun startup() {
-        val builder = JDABuilder.createLight(botToken)
+        val builder = JDABuilder.createLight(config.discordToken)
             .setActivity(Activity.playing("prefix - $prefix"))
 
         initializeCommands()
