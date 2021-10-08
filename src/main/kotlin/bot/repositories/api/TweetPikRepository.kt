@@ -32,7 +32,7 @@ class TweetPikRepository(private val config: BotConfiguration) {
             )
         }
 
-        var tweetPik = Klaxon().parse<TweetPik>(
+        val tweetPik = Klaxon().parse<TweetPik>(
                 fuel.post("https://tweetpik.com/api/images")
                     .body(json.toJsonString())
                     .awaitString()

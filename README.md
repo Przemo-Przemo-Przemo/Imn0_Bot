@@ -28,3 +28,4 @@ If not, exceptions will be thrown and the project won't work.
 | BOT_TWITCH_CLIENT_ID      | Twitch client id 
 | BOT_TWITTER_KEY           | Twitter api key (LoL tweets) 
 | BOT_MONGO_URI             | URI of the mognodb database (storing what to send next) 
+| BOT_DISCORD_MAIN_GUILD_ID | Guild around which certain features are centered (for example random invitation message chooses random target members from the main guild)

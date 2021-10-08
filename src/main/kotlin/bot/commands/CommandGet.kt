@@ -1,14 +1,11 @@
 package bot.commands
 
 import bot.models.Tweet
-import bot.models.TweetsJson
-import bot.repositories.api.TwitchRepository
-import net.dv8tion.jda.api.events.Event
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import bot.repositories.api.TwitterRepository
 import net.dv8tion.jda.api.entities.TextChannel
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+
 @Component
 class CommandGet : Command() {
     override val name = "get"
@@ -36,7 +33,7 @@ class CommandGet : Command() {
         }
 
         for(tweet in tweets) {
-            channel.sendMessage("https://twitter.com/${username}/status/${tweet.id}").queue() //temporary?
+            channel.sendMessage("https://twitter.com/${username}/status/${tweet.id}").queue()
         }
     }
 }

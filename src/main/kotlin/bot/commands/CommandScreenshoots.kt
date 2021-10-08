@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import bot.repositories.api.TweetPikRepository
 import bot.repositories.api.TwitterRepository
 import net.dv8tion.jda.api.entities.TextChannel
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -20,6 +21,8 @@ class CommandScreenshoots: Command() {
     @Autowired
     lateinit var tweetPikRepository: TweetPikRepository
 
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     override suspend fun execute(channel: TextChannel, args: List<String>) {
         val username = args[0]
         val numberOfTweets = args[1].toInt()
@@ -28,7 +31,8 @@ class CommandScreenshoots: Command() {
         try {
             tweets = twitterRepository.getTweets(username, numberOfTweets)
         } catch(exception: Exception) {
-            channel.sendMessage("A network request exception was thrown: ${exception.message}").queue()
+            logger.error(exception.message)
+            channel.sendMessage("API IS SUS XDDDDD").queue()
             return
         }
 
@@ -47,7 +51,7 @@ class CommandScreenshoots: Command() {
                 continue
             }
 
-            channel.sendMessage(tweetPik.url).queue() //temporary?
+            channel.sendMessage(tweetPik.url).queue()
         }
     }
 }

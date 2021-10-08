@@ -10,6 +10,7 @@ spring:
 application:
   discord:
     botToken: ${BOT_DISCORD_TOKEN}
+    mainGuildId: ${BOT_MAIN_GUILD_ID}
   tweetpik:
     apiKey: ${BOT_TWEETPIK_KEY}
   twitch:
