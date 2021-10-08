@@ -83,7 +83,7 @@ class Bot : ListenerAdapter() {
     }
 
     @PostConstruct
-    fun setupScheduleRandomMessages() {
+    fun setupPostConstruct() {
         scheduleRandomMessages()
         jda.addEventListener(
             imnoWordInMessageListener,
@@ -94,11 +94,11 @@ class Bot : ListenerAdapter() {
         schedules to mongo times when new random messages shall be sent
      */
     fun scheduleRandomMessages() {
-        val count = 1
-        val timeRangeInSeconds = 100L
+        val count = 5
+        val timeRangeInSeconds = 300L
         val delayBetweenCommands = timeRangeInSeconds / count
 
-        for(i in 0..count) {
+        for(i in 1..count) {
             val randomCommandWithRandomArguments = randomMessagesArgumentsGenerator.randomCommandWithRandomArguments()
             val commandName = randomCommandWithRandomArguments.first
             val commandArguments = randomCommandWithRandomArguments.second
