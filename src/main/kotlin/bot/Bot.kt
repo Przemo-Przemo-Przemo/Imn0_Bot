@@ -1,6 +1,7 @@
 package bot
 
 import bot.commands.*
+import bot.listeners.ImnoWordInMessageListener
 import bot.repositories.db.IOProductsLinkNew
 import bot.repositories.db.OProductsLinkNew
 import kotlinx.coroutines.GlobalScope
@@ -51,6 +52,9 @@ class Bot : ListenerAdapter() {
     @Autowired
     lateinit var config: BotConfiguration
 
+    @Autowired
+    lateinit var imnoWordInMessageListener: ImnoWordInMessageListener
+
     fun main() {
         runApplication<Bot>()
     }
@@ -64,7 +68,7 @@ class Bot : ListenerAdapter() {
         initializeFonts()
         scheduleRandomMessages()
 
-        builder.addEventListeners(this)
+        builder.addEventListeners(this, imnoWordInMessageListener)
         jda = builder.build().awaitReady()
     }
 
