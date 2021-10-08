@@ -1,4 +1,5 @@
 XD??????????????????????????⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮⸮ꓷX
+X                 date: year-month-day (important use dashes)             X
 X                                                                                                                  X
 X                       XD?clips twitchUsername startedAt                         X
 X                       XD?get twitterUsername tweetCount                       X
