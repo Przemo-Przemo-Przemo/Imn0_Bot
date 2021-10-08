@@ -8,11 +8,11 @@ abstract class Command {
     abstract val name: String
 
     open suspend fun run(event: Event) {
-        var event = event as GuildMessageReceivedEvent
-        var channel = event.channel
+        val event = event as GuildMessageReceivedEvent
+        val channel = event.channel
 
-        var messageSplitBySpace = event.message.contentRaw.split(' ')
-        var arguments = messageSplitBySpace.drop(1)
+        val messageSplitBySpace = event.message.contentRaw.split(' ')
+        val arguments = messageSplitBySpace.drop(1)
 
         execute(channel, arguments)
     }

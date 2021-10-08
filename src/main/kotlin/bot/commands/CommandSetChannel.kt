@@ -17,8 +17,8 @@ class CommandSetChannel : Command() {
     private lateinit var accountProductsRepository: IAccountProductsRepository
 
     override suspend fun run(event: Event) {
-        var event = event as GuildMessageReceivedEvent
-        var channel = event.channel
+        val event = event as GuildMessageReceivedEvent
+        val channel = event.channel
 
         val mentionedChannel = event.message.mentionedChannels[0]
 

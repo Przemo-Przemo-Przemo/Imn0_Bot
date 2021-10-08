@@ -48,9 +48,14 @@ class TwitchRepository(private val config: BotConfiguration) {
         return appAccessToken as String
     }
 
-    suspend fun getClips(broadcasterId: String): List<TwitchClip>  {
-        var clips = Klaxon().parse<TwitchClipsJson>(
-            fuel.get("https://api.twitch.tv/helix/clips", listOf("broadcaster_id" to broadcasterId))
+    suspend fun getClips(broadcasterId: String, startedAt: String): List<TwitchClip>  {
+        val params = listOfNotNull(
+            "broadcaster_id" to broadcasterId,
+            "started_at" to startedAt
+        ).filter { param -> param.second != "" }
+
+        val clips = Klaxon().parse<TwitchClipsJson>(
+            fuel.get("https://api.twitch.tv/helix/clips", params)
                 .awaitString()
         ) ?: throw NullPointerException("Clips are null")
 
@@ -58,7 +63,7 @@ class TwitchRepository(private val config: BotConfiguration) {
     }
 
     suspend fun getUser(username: String): TwitchUser {
-        var user = Klaxon().parse<TwitchUserJson>(
+        val user = Klaxon().parse<TwitchUserJson>(
             fuel.get("https://api.twitch.tv/helix/users", listOf("login" to username))
                 .awaitString()
         ) ?: throw NullPointerException("UserId is null")

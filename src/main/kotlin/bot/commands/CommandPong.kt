@@ -19,7 +19,7 @@ class CommandPong : Command() {
             return
         }
 
-        var file = File(uri)
+        val file = File(uri)
         channel.sendFile(file).queue()
     }
 }

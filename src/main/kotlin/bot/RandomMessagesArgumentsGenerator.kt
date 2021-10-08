@@ -5,6 +5,7 @@ import kotlinx.coroutines.runBlocking
 import net.dv8tion.jda.api.JDA
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 @Component
 class RandomMessagesArgumentsGenerator(jda: JDA, config: BotConfiguration) {
@@ -12,8 +13,14 @@ class RandomMessagesArgumentsGenerator(jda: JDA, config: BotConfiguration) {
 
     //todo: reflections test whether all commands are met
     init {
+        val days = ArrayList<String>()
+        for(i in 0..20) {
+            days.add(LocalDate.now().minusDays(
+                (1..7).random().toLong()).toString())
+        }
         commandNameToListOfSetOfPossibleArguments["clips"] = listOf(
-            setOf("Pokimane", "Jinnytty", "ratirl", "thebausffs", "drututt")
+            setOf("Pokimane", "Jinnytty", "ratirl", "thebausffs", "drututt"),
+            days.toSet()
         )
 
         commandNameToListOfSetOfPossibleArguments["get"] = listOf(
@@ -38,9 +45,8 @@ class RandomMessagesArgumentsGenerator(jda: JDA, config: BotConfiguration) {
     }
 
     fun randomCommandWithRandomArguments(): Pair<String, List<String>> {
-        val command = commandNameToListOfSetOfPossibleArguments.keys.random()
-//        val command = "invitation"
-
+        //val command = commandNameToListOfSetOfPossibleArguments.keys.random()
+        val command = "clips"
         return Pair(command, randomArguments(command))
     }
 
