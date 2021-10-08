@@ -20,7 +20,7 @@ class RandomMessagesArgumentsGenerator(jda: JDA, config: BotConfiguration) {
         }
         commandNameToListOfSetOfPossibleArguments["clips"] = listOf(
             setOf("Pokimane", "Jinnytty", "ratirl", "thebausffs", "drututt"),
-            days.toSet()
+            days.toSet() //TODO: make which clip to take (not always the most popular one) random as well
         )
 
         commandNameToListOfSetOfPossibleArguments["get"] = listOf(
@@ -45,8 +45,8 @@ class RandomMessagesArgumentsGenerator(jda: JDA, config: BotConfiguration) {
     }
 
     fun randomCommandWithRandomArguments(): Pair<String, List<String>> {
-        //val command = commandNameToListOfSetOfPossibleArguments.keys.random()
-        val command = "clips"
+        val command = commandNameToListOfSetOfPossibleArguments.keys.random()
+
         return Pair(command, randomArguments(command))
     }
 
