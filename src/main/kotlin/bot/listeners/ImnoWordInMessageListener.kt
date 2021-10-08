@@ -10,7 +10,8 @@ class ImnoWordInMessageListener : ListenerAdapter() {
         val content = event.message.contentDisplay
 
         if(containsImno(content)) {
-            event.channel.sendMessage("O co chodzi?").queue()
+            val replyContent = listOf("O co chodzi?", "?").random()
+            event.message.reply(replyContent).queue()
         }
     }
 
