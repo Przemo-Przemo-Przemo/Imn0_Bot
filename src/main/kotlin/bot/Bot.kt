@@ -1,6 +1,7 @@
 package bot
 
 import bot.commands.*
+import bot.listeners.AmogusInMessageListener
 import bot.listeners.ImnoWordInMessageListener
 import bot.repositories.db.IOProductsLinkNew
 import bot.repositories.db.OProductsLinkNew
@@ -58,6 +59,9 @@ class Bot : ListenerAdapter() {
     @Autowired
     lateinit var imnoWordInMessageListener: ImnoWordInMessageListener
 
+    @Autowired
+    lateinit var amogusInMessageListener: AmogusInMessageListener
+
     fun main() {
         runApplication<Bot>()
     }
@@ -71,7 +75,8 @@ class Bot : ListenerAdapter() {
         initializeCommands()
         initializeFonts()
 
-        builder.addEventListeners(this, imnoWordInMessageListener)
+        builder.addEventListeners(this)
+
         jda = builder.build().awaitReady()
 
         return jda;
@@ -80,6 +85,10 @@ class Bot : ListenerAdapter() {
     @PostConstruct
     fun setupScheduleRandomMessages() {
         scheduleRandomMessages()
+        jda.addEventListener(
+            imnoWordInMessageListener,
+            amogusInMessageListener
+        )
     }
     /**
         schedules to mongo times when new random messages shall be sent
